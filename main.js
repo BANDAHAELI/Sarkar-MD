@@ -12,6 +12,7 @@ import 'moment-timezone';
 import _0x5a7360 from 'axios';
 import _0xccedb8 from './config.cjs';
 import _0x11fa72 from './lib/autoreact.cjs';
+import { File } from 'megajs';
 const {
   emojis,
   doReact
@@ -39,13 +40,14 @@ async function downloadSessionData() {
     console.error("Please add your session to SESSION_ID env !!");
     return false;
   }
-  const _0x331b8a = _0xccedb8.SESSION_ID.split("Sarkarmd$")[0x1];
-  const _0x170b41 = 'https://pastebin.com/raw/' + _0x331b8a;
+  const sessdata = _0xccedb8.SESSION_ID;
+  const file = File.fromURL(`https://mega.nz/file/${sessdata}`);
   try {
-    const _0x5a3e5f = await _0x5a7360.get(_0x170b41);
-    const _0x7f614 = typeof _0x5a3e5f.data === 'string' ? _0x5a3e5f.data : JSON.stringify(_0x5a3e5f.data);
-    await _0x5687e2.promises.writeFile(credsPath, _0x7f614);
-    console.log("🌏Sarkar-MD ONLINE🌏");
+    file.download((err, data) => {
+      if (err) throw err;
+      _0x5687e2.writeFileSync(credsPath, data);
+      console.log("🌏Sarkar-MD ONLINE🌏");
+    });
     return true;
   } catch (_0x100795) {
     return false;
